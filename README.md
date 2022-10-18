@@ -19,13 +19,27 @@ Performs quadratic regression
 
 ### examples_regression.py:
 
-Contains examples in which data is generated using a linear / quadratic model and then regression is performed to retrieve the original function parameters.
+Contains examples in which data is generated using a linear / quadratic model and then regression is performed to retrieve the original function parameters. Multivariate regression is also included in the example scripts, but not discussed here in the README, as it is not as pretty to visualize the data and the obtained model.
 
-##### linear regression univariate
+##### Linear Regression Univariate
 
-First we create a dataset containing 100 samples from the interval [-10, 10] that follow the linear model f(x)=2*x+10
+First we create a dataset containing 100 samples from the interval [-10, 10] that follow the linear model f(x)=2*x+10+E where E ~ N(0,0.8). That means we add a gaussian distributed error with mean = 0 and standard deviation (STD) = 0.8.
 
-["linear_data"](images/data_linear.png)
+!["linear_data"](images/data_linear.png)
 
+Now we can perform regression, which gives us a parameter estimation for our linear model based on the data that we generated. It uses Least Squares estimation to obtain the most well-fitting set of parameters. In my specific run I obtained the estimations [2.019011, 9.87388536], which lies rather close to the actual ones. The additive error is present in our data as well, when we look at the Mean Squared Error (MSE) we should find a number close to our STD squared. In my example, the MSE is ~0.664, which is close to 0.64 (0.8 squared).
 
+!["linear_data_regression"](images/data_regression_linear.png)
+
+##### Quadratic Regression Univariate
+
+Again, we first create our data of a 100 random samples from the interval [-10, 10]. But this time we create our data values from these samples using a quadratic model f(x)=0.8*x^2+5*x-5+E with E ~ N(0,3).
+
+!["linear_data"](images/data_quadratic.png)
+
+Then we perform regression to determine the parameters of our quadratic model. My test run estimated the following parameters: 
+[0.78126571, 4.99260825, -4.40157621]
+Again, rather close to the producing model, but this time the error was a bit higher. This was because my additive error component had a much higher STD this time. The MSE was 7.967, which again is close to 9, the STD squared.
+
+!["linear_data_regression"](images/data_regression_quadratic.png)
 
