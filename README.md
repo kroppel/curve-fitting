@@ -1,7 +1,8 @@
 # Linear and Quadratic Regression
-## Module providing functions to perform linear and quadratic regression on multivariate data.
 
-### src/regression.py:
+Module providing functions to perform linear and quadratic regression on multivariate data.
+
+## src/regression.py:
 
 Provides the functions for regression as well as data generation
 
@@ -17,11 +18,11 @@ __LSRegressionQuadratic(X, y):__
 
 Performs quadratic regression
 
-### examples_regression.py:
+## examples_regression.py:
 
 Contains examples in which data is generated using a linear / quadratic model and then regression is performed to retrieve the original function parameters. Multivariate regression is also included in the example scripts, but not discussed here in the README, as it is not as pretty to visualize the data and the obtained model.
 
-##### Linear Regression Univariate
+### Linear Regression Univariate
 
 First we create a dataset containing 100 samples from the interval [-10, 10] that follow the linear model f(x)=2*x+10+E where E ~ N(0,0.8). That means we add a gaussian distributed error with mean = 0 and standard deviation (STD) = 0.8.
 
@@ -31,7 +32,7 @@ Now we can perform regression, which gives us a parameter estimation for our lin
 
 !["linear_data_regression"](images/data_regression_linear.png)
 
-##### Quadratic Regression Univariate
+### Quadratic Regression Univariate
 
 Again, we first create our data of a 100 random samples from the interval [-10, 10]. But this time we create our data values from these samples using a quadratic model f(x)=0.8*x^2+5*x-5+E with E ~ N(0,3).
 
