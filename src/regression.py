@@ -2,8 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-"""Generate a set of n datapoints from the function in interval
-[start, end] with given additive noise (normal distributed with given std-dev)
+"""Generate ``number_dp`` datapoints (x,y) with x being a vector 
+containing ``dim_x`` random elements drawn from the interval [start, end) 
+and y being a scalar obtained by evaluating the expression func(x) 
+and adding gaussion distributed noise with parameters mean = 0 and 
+std = ``noise``
 """
 def generate_datapoints(number_dp, dim_x, start=0, end=1, func=(lambda x: x), noise=1):
     rng = np.random.default_rng(int(time.time()))

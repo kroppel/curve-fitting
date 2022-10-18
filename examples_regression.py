@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from src.regression import generate_datapoints, LSRegressionLinear, LSRegressionQuadratic, model_linear, model_quadratic1D, model_quadraticMD, add_X_outer
 
+save_to_file = False
+
 """Plot data points given by (x,y)
 """
 def show_datapoints(x, y):
@@ -13,7 +15,10 @@ def show_datapoints(x, y):
     axs.spines['top'].set_visible(False)
     axs.spines['right'].set_visible(False)
     axs.scatter(x, y)
-    plt.show()
+    if not save_to_file:
+        plt.show()
+    else:
+        plt.savefig("data.png")
 
 """Plot sets of data points given by (x,y) and
 the regression model func with its parameters w
@@ -33,7 +38,10 @@ def show_datapoints_and_regression(x, y, func, w):
     axs.spines['right'].set_visible(False)
     axs.scatter(x, y)
     axs.plot(x, (func(w))(x))
-    plt.show()
+    if not save_to_file:
+        plt.show()
+    else:
+        plt.savefig("data_regression.png")
 
 def linear_regression_univariate_example():
     # Generate linear data
