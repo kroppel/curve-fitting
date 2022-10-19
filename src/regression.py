@@ -12,7 +12,6 @@ def generate_datapoints(number_dp, dim_x, start=0, end=1, func=(lambda x: x), no
     rng = np.random.default_rng(int(time.time()))
 
     X = rng.random((number_dp, dim_x))*(end-start)+start
-    print(X.shape)
     Y = np.apply_along_axis(func, 1, X)
     Y = Y.reshape((number_dp,1))
     Y = Y + rng.normal(0, noise, (number_dp, 1))
@@ -75,8 +74,12 @@ def show_datapoints_and_regression(x, y, func, w):
     plt.show()
 
 """Performs the outer product for each row vector in matrix X
-with itself and returns the upper right result matrix triangle
-including the diagonal
+with itself and then adds the upper right triangle matrix of the result
+including the diagonal flattened from the left onto X itself.
+The intent of this function is to add all combinations of X's
+(the independent variable's) components to X itself to
+make the evaluation of a quadratic function possible by
+simply performing a dot product between vectors.
 """
 def add_X_outer(X):
     if len(X.shape)==1:
@@ -96,79 +99,20 @@ def add_X_outer(X):
     return X
 
 """Returns a function that represents a linear function f with the following properties:
-        f([x]) -> x*weights + bias 
-Bias must be passed as last element of the weights array"""
+
+        f(X) -> X*weights + bias 
+
+Bias must be passed as last element of the weights array
+"""
 def model_linear(weights):
     return lambda x: np.dot(x,weights[0:-1])+weights[-1]
 
-def model_quadratic1D(weights):  
-    return lambda x: np.dot(np.power(x,2),weights[0])+np.dot(x,weights[1])+weights[-1]
+"""Returns a function that represents a quadratic function f with the following properties:
 
-def model_quadraticMD(weights):  
+        f(X) -> (xi*xj for every combination xi,xj in X)*weights_quadratic + X*weights_linear + bias 
+        
+Weights and bias must all be part of the weights array following the order [weights_quadratic, weights_linear, bias]
+The function add_X_outer enables the evaluation of the function at the input X by simply performing a dot product
+"""
+def model_quadratic(weights):
     return lambda x: np.dot(add_X_outer(x),weights[0:-1])+weights[-1]
-
-def linear_regression_univariate_example():
-    # Generate linear data
-    X, Y = generate_datapoints(number_dp=100, dim_x=1, start=-10, end=10, func=model_linear(np.asarray([2, 10])), noise=0.8)
-    show_datapoints(X, Y)
-    # Perform linear regression
-    weights = LSRegressionLinear(X, Y)
-    predictions = np.dot(X, weights[0:-1]) + weights[-1]
-    show_datapoints_and_regression(X, Y, model_linear, weights)
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
-
-    print("MSE: "+str(mse))
-    print(weights)
-
-def linear_regression_multivariate_example():
-    # Generate linear data
-    X, Y = generate_datapoints(number_dp=100, dim_x=3, start=-10, end=10, func=model_linear(np.asarray([2, -3, 4, -5])), noise=1)
-    # Perform linear regression
-    weights = LSRegressionLinear(X, Y)
-    predictions = np.dot(X, weights[0:-1]) + weights[-1]
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
-
-    print("MSE: "+str(mse))
-    print(weights)
-
-def quadratic_regression_univariate_example():
-    # Generate quadratic data
-    X, Y = generate_datapoints(number_dp=100, dim_x=1, start=-10, end=10, func=model_quadratic1D(np.asarray([0.8, 5, -5])), noise=3)
-    show_datapoints(X, Y)
-    # Perform linear regression
-    weights = LSRegressionQuadratic(X, Y)
-    print(weights)
-
-    X_mod = add_X_outer(X)
-
-    predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
-    show_datapoints_and_regression(X, Y, model_quadratic1D, weights)
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
-
-    print("MSE: "+str(mse))
-    print(weights)
-
-def quadratic_regression_multivariate_example():
-    # Generate quadratic data (#parameters = sum([1,2,...,dim_x, dim_x+1]))
-    X, Y = generate_datapoints(number_dp=100, dim_x=2, start=-10, end=10, func=model_quadraticMD(np.asarray([0.8, 4, 3, 2, 2, -5])), noise=3)
-    # Perform linear regression
-    weights = LSRegressionQuadratic(X, Y)
-    print(X.shape)
-
-    X_mod = add_X_outer(X)
-
-    predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
-
-    print("MSE: "+str(mse))
-    print(weights)
-
-def main():
-    linear_regression_univariate_example()
-    linear_regression_multivariate_example()
-    quadratic_regression_univariate_example()
-    quadratic_regression_multivariate_example()
-
-
-if __name__ == "__main__":
-    main()

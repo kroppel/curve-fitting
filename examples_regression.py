@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from src.regression import generate_datapoints, LSRegressionLinear, LSRegressionQuadratic, model_linear, model_quadratic1D, model_quadraticMD, add_X_outer
+from src.regression import generate_datapoints, LSRegressionLinear, LSRegressionQuadratic, model_linear, model_quadratic, add_X_outer
 
 save_to_file = False
 
@@ -51,8 +51,8 @@ def linear_regression_univariate_example():
     weights = LSRegressionLinear(X, Y)
     predictions = np.dot(X, weights[0:-1]) + weights[-1]
     show_datapoints_and_regression(X, Y, model_linear, weights)
+    
     mse = np.sum(np.power(predictions-Y, 2))/len(Y)
-
     print("MSE: "+str(mse))
     print(weights)
 
@@ -62,40 +62,34 @@ def linear_regression_multivariate_example():
     # Perform linear regression
     weights = LSRegressionLinear(X, Y)
     predictions = np.dot(X, weights[0:-1]) + weights[-1]
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
 
+    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
     print("MSE: "+str(mse))
     print(weights)
 
 def quadratic_regression_univariate_example():
     # Generate quadratic data
-    X, Y = generate_datapoints(number_dp=100, dim_x=1, start=-10, end=10, func=model_quadratic1D(np.asarray([0.8, 5, -5])), noise=3)
+    X, Y = generate_datapoints(number_dp=100, dim_x=1, start=-10, end=10, func=model_quadratic(np.asarray([0.8, 5, -5])), noise=3)
     show_datapoints(X, Y)
     # Perform linear regression
     weights = LSRegressionQuadratic(X, Y)
-    print(weights)
-
     X_mod = add_X_outer(X)
-
     predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
-    show_datapoints_and_regression(X, Y, model_quadratic1D, weights)
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
+    show_datapoints_and_regression(X, Y, model_quadratic, weights)
 
+    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
     print("MSE: "+str(mse))
     print(weights)
 
 def quadratic_regression_multivariate_example():
     # Generate quadratic data (#parameters = sum([1,2,...,dim_x, dim_x+1]))
-    X, Y = generate_datapoints(number_dp=100, dim_x=2, start=-10, end=10, func=model_quadraticMD(np.asarray([0.8, 4, 3, 2, 2, -5])), noise=3)
+    X, Y = generate_datapoints(number_dp=100, dim_x=2, start=-10, end=10, func=model_quadratic(np.asarray([0.8, 4, 3, 2, 2, -5])), noise=3)
     # Perform linear regression
     weights = LSRegressionQuadratic(X, Y)
-    print(X.shape)
-
     X_mod = add_X_outer(X)
-
     predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
-    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
 
+    mse = np.sum(np.power(predictions-Y, 2))/len(Y)
     print("MSE: "+str(mse))
     print(weights)
 
