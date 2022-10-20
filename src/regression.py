@@ -40,39 +40,6 @@ def LSRegressionQuadratic(X, y):
 
     return W
 
-"""Plot data points given by (x,y)
-"""
-def show_datapoints(x, y):
-    fig = plt.figure()
-    axs = fig.add_subplot(1, 1, 1)
-    axs.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
-    axs.spines['bottom'].set_position('zero')
-    axs.spines['left'].set_position('zero')
-    axs.spines['top'].set_visible(False)
-    axs.spines['right'].set_visible(False)
-    axs.scatter(x, y)
-    plt.show()
-
-"""Plot sets of data points given by (x,y) and
-the regression model func with its parameters w
-"""
-def show_datapoints_and_regression(x, y, func, w):
-    # sort datapoints (important for line plot)
-    sorted_indices = np.argsort(x, axis=0)
-    x = np.take_along_axis(x, sorted_indices, axis=0)
-    y = np.take_along_axis(y, sorted_indices, axis=0)
-    
-    fig = plt.figure()
-    axs = fig.add_subplot(1, 1, 1)
-    axs.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
-    axs.spines['bottom'].set_position('zero')
-    axs.spines['left'].set_position('zero')
-    axs.spines['top'].set_visible(False)
-    axs.spines['right'].set_visible(False)
-    axs.scatter(x, y)
-    axs.plot(x, (func(w))(x))
-    plt.show()
-
 """Performs the outer product for each row vector in matrix X
 with itself and then adds the upper right triangle matrix of the result
 including the diagonal flattened from the left onto X itself.
