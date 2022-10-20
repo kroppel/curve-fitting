@@ -29,13 +29,7 @@ def LSRegressionLinear(X, y):
 """Perform quadratic regression using least squares method
 """
 def LSRegressionQuadratic(X, y):
-    X_mod = np.concatenate((X, np.ones((X.shape[0], 1))), axis=1)
-    # compute outer product between data vectors in X
-    X_outer = np.einsum('...i,...j->...ij',X,X)
-    # choose upper right part of pairwise products of the components of x
-    # (including diagonal) to concatenate to vector x
-    for dim in np.arange(1, X.shape[1]+1):
-        X_mod = np.concatenate((X_outer[:,-dim,-dim:],X_mod), axis=1)
+    X_mod = np.concatenate((add_X_outer(X), np.ones((X.shape[0], 1))), axis=1)
     W = np.dot(np.linalg.inv(np.dot(X_mod.transpose(), X_mod)), np.dot(X_mod.transpose(), y))
 
     return W
@@ -63,6 +57,7 @@ def add_X_outer(X):
         # (including diagonal) to concatenate to vector x
         for dim in np.arange(1, X.shape[1]+1):
             X = np.concatenate((X_outer[:,-dim,-dim:],X), axis=1)
+
     return X
 
 """Returns a function that represents a linear function f with the following properties:

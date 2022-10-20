@@ -49,7 +49,7 @@ def linear_regression_univariate_example():
     show_datapoints(X, Y)
     # Perform linear regression
     weights = LSRegressionLinear(X, Y)
-    predictions = np.dot(X, weights[0:-1]) + weights[-1]
+    predictions = model_linear(weights)(X)
     show_datapoints_and_regression(X, Y, model_linear, weights)
     
     mse = np.sum(np.power(predictions-Y, 2))/len(Y)
@@ -61,7 +61,7 @@ def linear_regression_multivariate_example():
     X, Y = generate_datapoints(number_dp=100, dim_x=3, start=-10, end=10, func=model_linear(np.asarray([2, -3, 4, -5])), noise=1)
     # Perform linear regression
     weights = LSRegressionLinear(X, Y)
-    predictions = np.dot(X, weights[0:-1]) + weights[-1]
+    predictions = model_linear(weights)(X)
 
     mse = np.sum(np.power(predictions-Y, 2))/len(Y)
     print("MSE: "+str(mse))
@@ -71,10 +71,9 @@ def quadratic_regression_univariate_example():
     # Generate quadratic data
     X, Y = generate_datapoints(number_dp=100, dim_x=1, start=-10, end=10, func=model_quadratic(np.asarray([0.8, 5, -5])), noise=3)
     show_datapoints(X, Y)
-    # Perform linear regression
+    # Perform quadratic regression
     weights = LSRegressionQuadratic(X, Y)
-    X_mod = add_X_outer(X)
-    predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
+    predictions = model_quadratic(weights)(X)
     show_datapoints_and_regression(X, Y, model_quadratic, weights)
 
     mse = np.sum(np.power(predictions-Y, 2))/len(Y)
@@ -84,10 +83,9 @@ def quadratic_regression_univariate_example():
 def quadratic_regression_multivariate_example():
     # Generate quadratic data (#parameters = sum([1,2,...,dim_x, dim_x+1]))
     X, Y = generate_datapoints(number_dp=100, dim_x=2, start=-10, end=10, func=model_quadratic(np.asarray([0.8, 4, 3, 2, 2, -5])), noise=3)
-    # Perform linear regression
+    # Perform quadratic regression
     weights = LSRegressionQuadratic(X, Y)
-    X_mod = add_X_outer(X)
-    predictions = np.dot(X_mod, weights[0:-1]) + weights[-1]
+    predictions = model_quadratic(weights)(X)
 
     mse = np.sum(np.power(predictions-Y, 2))/len(Y)
     print("MSE: "+str(mse))
