@@ -52,6 +52,26 @@ Again, rather close to the producing model, but this time the error was a bit hi
 
 Functions for Least Squares Estimation of Ellipse Parameters. 
 
+To fit the parameters of an ellipse to a given set of points, we first of all need to identify the points to fit.
+When working on images, one possibility may be to generate a binary image using adaptive thresholding, and then analyzing
+the image for connected components:
+
+!["ellipse_detected"](images/ellipse_detected.PNG)
+!["ellipse_detected2"](images/ellipse_detected2.PNG)
+
+Now that we know which points to fit, we have different possibilities to model our ellipse and estimate the model's parameters.
+One implementation uses the equation a*x^2 + b*xy + c*y^2 + d*x + e*y + f = 0 with the constraint b^2 - 4ac = -1. This results
+in a generalized eigenproblem which is solved using the qz factorization:
+
+!["ellipse_fitted](images/points_fitted.PNG)
+
+With the ellipse parameters estimated, we can precisely calculate the position in the image by evaluating the equation for every pixel.
+Pixels that result in residuals smaller than a given epsilon (so close to zero) form the ellipse:
+
+!["ellipse_fitted](images/ellipse_fitted_redrawn.PNG)
+
+
+
 
 
 
